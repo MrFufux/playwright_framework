@@ -1,0 +1,5 @@
+// The declarative pipeline configuration for CI/CD execution, 
+// providing you can integrate tests into a deployment pipeline
+
+//The CI/CD pipeline code to clone the repo, install dependencies, 
+// and execute the tests in a headless environment.
