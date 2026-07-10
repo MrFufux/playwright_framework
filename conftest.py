@@ -34,6 +34,9 @@ def browser_context_args(browser_context_args: dict) -> dict:
         I overrride the browser_context_args fixture to force strict viewports
         Ensures our CI Pipeline on jenkins runs in the same state as my local machine
         This eliminates flakiness
+
+        If the devs change the version of the api, I only need to update the URL in one single file
+        (conftest.py) and not hunting down hundreds of strings accross the test scripts.
         '''
     }
 
@@ -60,7 +63,7 @@ def ui_page(page:Page) -> Page:
     (clearing cookies or closing connections) after the test finishes.
 
     Yield pauses the fixture, allows the test to run and then the clean up happens and do not leave
-    any garbage begind when the test is over.
+    any garbage when the test is over.
     '''
 
     # Teardown (Optional): We could clear local storage or cookies here if needed,
