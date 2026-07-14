@@ -44,7 +44,7 @@ def browser_context_args(browser_context_args: dict) -> dict:
 # 2. CUSTOM UI PAGE WRAPPER
 # ----------------------------------------------------------------------
 @pytest.fixture(scope='function')
-def ui_page(page:Page) -> Page:
+def ui_page(page:Page) -> Generator[Page, None, None]:
     """
     Custom fixture that wraps the default Playwright page.
     It automatically navigates to the base URL before the test starts,
