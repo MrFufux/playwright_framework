@@ -29,7 +29,7 @@ def browser_context_args(browser_context_args: dict) -> dict:
         "ignore_https_errors": True,
         # Base URL allows tests to just say page.goto("/login") 
         # instead of the full domain, making it easy to swap between staging/prod.
-        "base_url": "www.page.com"
+        "base_url": "www.base_url_goes_here.com"
         '''
         I overrride the browser_context_args fixture to force strict viewports
         Ensures our CI Pipeline on jenkins runs in the same state as my local machine
