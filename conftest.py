@@ -5,7 +5,7 @@ Holds all the fixtures (setup and teardown functions)
 The tests files stay clean
 
 '''
-
+import os
 import pytest
 import httpx
 from typing import Generator
@@ -20,6 +20,8 @@ def browser_context_args(browser_context_args: dict) -> dict:
     Intercepts and overrides the default Playwright browser context.
     Demonstrates environment control for CI/CD consistency.
     """
+    # Fallback to a default if the env variable isn't set
+    base_url = os.getenv("UI_BASE_URL", "https://www.base_url_goes_here.com"))
     return {
         # **: takes all the existing key-value pairs from the default browser_context_args dict 
         # and put it (merges) into a new dict that I'm creating.
@@ -29,15 +31,15 @@ def browser_context_args(browser_context_args: dict) -> dict:
         "ignore_https_errors": True,
         # Base URL allows tests to just say page.goto("/login") 
         # instead of the full domain, making it easy to swap between staging/prod.
-        "base_url": "www.base_url_goes_here.com"
-        '''
-        I overrride the browser_context_args fixture to force strict viewports
-        Ensures our CI Pipeline on jenkins runs in the same state as my local machine
-        This eliminates flakiness
+        "base_url": base_url
 
-        If the devs change the version of the api, I only need to update the URL in one single file
-        (conftest.py) and not hunting down hundreds of strings accross the test scripts.
-        '''
+        # I override the browser_context_args fixture to force strict viewports.
+        # Ensures our CI Pipeline on Jenkins runs in the same state as my local machine.
+        # This eliminates flakiness.
+        #
+        # If the devs change the version of the API, I only need to update the URL in 
+        # one single file (conftest.py) or environment variable and not hunt down 
+        # hundreds of strings across the test scripts.
     }
 
 # ----------------------------------------------------------------------
@@ -72,7 +74,7 @@ def ui_page(page:Page) -> Generator[Page, None, None]:
 # ----------------------------------------------------------------------
 # 3. HTTPX API CLIENT (PERFORMANCE OPTIMIZED)
 # ----------------------------------------------------------------------
-# scoper per sessions maintains the TCP 3-way hadshake and TLS/SSL negotiation to establish connection.
+# scope per sessions maintains the TCP 3-way hadshake and TLS/SSL negotiation to establish connection.
 @pytest.fixture(scope='session')
 def api_client() -> Generator[httpx.Client, None, None]:
     # httpx.Client() opens a single connection pool. It keeps the TCP/TLS connection alive.
