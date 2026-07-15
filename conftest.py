@@ -22,7 +22,7 @@ def browser_context_args(browser_context_args: dict) -> dict:
     Demonstrates environment control for CI/CD consistency.
     """
     # Fallback to a default if the env variable isn't set
-    base_url = os.getenv("UI_BASE_URL", "https://www.base_url_goes_here.com")
+    base_url = os.getenv("UI_BASE_URL", "https://www.wazoku.com/")
     return {
         # **: takes all the existing key-value pairs from the default browser_context_args dict 
         # and put it (merges) into a new dict that I'm creating.
