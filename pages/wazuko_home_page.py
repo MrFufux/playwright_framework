@@ -16,24 +16,30 @@ class WazukoHomePage(BasePage): # this class inherits from BasePage
 
     # constructor
     def __init__(self, page: Page):
-        # Passes the page onject up to the parent BasePage class
+        # Passes the page object up to the parent BasePage class
         # so its methods can function
         super().__init__(page) 
 
 
         # Locators (instance variables)
+
+        # Cookies accept
+        self.accept_cookies = self.page.get_by_role('button', name='Allow all cookies')
+
         # Main options: 
         self.who_we_are_button = self.page.get_by_role('button', name='Who we are')
         self.where_we_help_button = self.page.get_by_role('button',name='Where we help')
 
         # options inside main options
         self.join_us_option = self.page.get_by_text('Join us')
-        self.water_option = self.page.get_by_text('Water')
-
-        self.talk_to_an_expert_option = self.page.get_by_role('link', name='Talk to an Expert')
+        self.water_option = self.page.get_by_label("Global").get_by_text("Water")
+        self.talk_to_an_expert_option = self.page.get_by_role('link', name='Talk to an Expert').first
 
     
     # Actions (Methods)
+
+    def accept_cookies_option(self):
+        self.click_element(self.accept_cookies)
 
     def open_what_we_do_menu(self):
         #clicks the Who we are button reusing the click_element BasePage method
@@ -41,5 +47,14 @@ class WazukoHomePage(BasePage): # this class inherits from BasePage
 
     def open_where_we_help_menu(self):
         self.click_element(self.where_we_help_button)
+
+    def open_water_option(self):
+        self.click_element(self.water_option)
+
+    def click_talk_to_expert_option(self):
+        self.click_element(self.talk_to_an_expert_option)
+
+    def click_join_us_option(self):
+        self.click_element(self.join_us_option)
 
     
