@@ -15,6 +15,6 @@ def test_where_we_help_option(ui_page: Page):
     home_page.open_water_option()
 
     # 3. ASSERT: Verify the expected outcomes
-    expect.soft(home_page.talk_to_an_expert_option).to_be_enabled
-    expect.soft(home_page.talk_to_an_expert_option).to_be_visible
+    expect.soft(home_page.talk_to_an_expert_option).to_be_enabled()
     expect.soft(home_page.talk_to_an_expert_option).to_have_text('Talk to an Expert')
+    # to_have_text(): automatically waits for the element to be visible

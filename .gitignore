@@ -4,3 +4,7 @@ __pycache__/
 .pytest_cache/
 *.pyc
 .env
+build/
+data_driven_datasets/
+.DS_Store
+wazoku_framework.egg-info/
