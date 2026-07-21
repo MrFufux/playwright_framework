@@ -1,0 +1,19 @@
+{
+    "github_api": {
+        "valid_user": {
+            "username": "octocat",
+            "expected_repos_count_min": 5
+        },
+        "nonexistent_user": {
+            "username": "thisuserdoesnotexist12345"
+        }
+    },
+    "payloads": {
+        "create_repo": {
+            "name": "test-repo-automation",
+            "description": "Created by API test automation",
+            "private": false,
+            "auto_init": true
+        }
+    }
+}
