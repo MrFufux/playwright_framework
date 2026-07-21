@@ -199,5 +199,7 @@ class APIClient:
         
     # RESOURCE MANAGEMENT
     def close(self):
-        """Close the underlying HTTPX client and release connections"""
+        """Close the underlying httpx.Client and release connections.
+        Shutting down the active TCP connection pool and freeing up
+        system resources """
         self.client.close()
