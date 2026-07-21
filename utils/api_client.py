@@ -18,7 +18,7 @@ import logging # python's built-in logging module to track events when run
 # type hints, helps to catch error before the code runs
 from typing import Optional, Dict, Any
 
-# decorator that automaticallt generates boilerplate code(__init__ and __repr__)
+# decorator that automatically generates boilerplate code(__init__ and __repr__)
 # for classes that stores data
 from dataclasses import dataclass 
 
@@ -60,7 +60,7 @@ class APIClient:
      # constructor
      # accepts a base_url, timeout, and custom headers using Optional
      def __init__(self, base_url:str,timeout:float = 10.0, 
-                  headers:Optional[Dict[str, str]] = None):
+                headers:Optional[Dict[str, str]] = None):
 
     
         # Saves the base URL while stripping trailing extra slashes(/)
@@ -101,7 +101,48 @@ class APIClient:
             if 'json' in kwargs: # checks if JSON payload was passed into the request
                 
                 # Logs the actual data payload
-                logger.debug(f"Payload: {kwargs['json']}")
+                logger.debug(f"PAYLOAD: {kwargs['json']}")
 
-                
+        # A private helper to standardize how incoming responses are logged
+        def _log_response(self, response:httpx.Response):
+            """Log responses for debugging"""
+
+            # Logs the status code and the URL that responded
+            logger.info(f"RESPONSE: [{response.status_code}] from {response.url}")
+            
+            # Logs the truncated snippet(first 200 char) of the
+            # response body for debugging purposes
+            logger.debug(f"RESPONSE body: {response.text[:200]}...")
+
+
+        # HTTP METHODS (GET, POST, PUT, DELETE)
+        #GET method
+        def get_method(self, path: str, params:Optional[Dict] = None) -> APIResponse:
+            """Perform a GET request"""
+            url = f"{self.base_url}/{path.lstrip('/')}" # construct the url with the base_url and lstrip /
+            self._log_request('GET', url) # calls the internal logger
+
+            # Executes the HTTP GET request using the persistent session httpx.Client
+            response = self.client.get(url, params=params)
+            self._log_response(response) # Logs the result
+
+            #Raise exception for 4xx / 5xx 
+            # Fail fast mechanism.
+            # If the API returns an error code (4xx or 5xx)
+            # this line throws a Python exception and stope the code
+            # from processing a failed response as if it were success
+            response.raise_for_status() 
+
+            # Packages the raw httpx.Response into a clear structured APIResponse data class
+            return APIResponse(
+                status_code = response.status_code,
+                body = response.json(),
+                headers=response.headers
+            )
+        
+
+
+        
+
+
 
