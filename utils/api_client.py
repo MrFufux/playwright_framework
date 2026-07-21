@@ -142,11 +142,67 @@ class APIClient:
         
     # POST method
     def post_method(self, path:str, json_data:Optional[Dict] = None) -> APIResponse:
+        #it takes json_data dict
+        """Perform a POST request"""
+        url = f"{self.base_url}/{path.lstrip('/')}"
+        self._log_request("POST", url)
         
-
-
-
+        # automatically serializes the python dictionary into a JSON string
+        # and sets the correct headers
+        response = self.client.post(url, json=json_data)
+        self._log_response(response)
         
-
-
-
+        response.raise_for_status()
+        
+        return APIResponse(
+            status_code= response.status_code,
+            body=response.json(),
+            headers=response.headers
+        )
+        
+    # PUT method
+    def put_method(self,path:str, json_data:Optional[Dict] = None) -> APIResponse:
+        """Perform a PUT request"""
+        url = f"{self.base_url}/{path.lstrip('/')}"
+        self._log_request("PUT", url)
+        
+        # automatically serializes the python dictionary into a JSON string
+        # and sets the correct headers
+        response = self.client.put(url, json=json_data)
+        self._log_response(response)
+        
+        response.raise_for_status()
+        
+        return APIResponse(
+            status_code= response.status_code,
+            body=response.json(),
+            headers=response.headers  
+        )
+        
+    # DELETE method
+    def delete_method(self,path:str) -> APIResponse:
+        """Perform a DELETE request"""
+        url = f"{self.base_url}/{path.lstrip('/')}"
+        self._log_request('DELETE', url)
+        
+        response = self.client.delete(url)
+        self._log_response(response)
+        
+        response.raise_for_status()
+        
+        return APIResponse(
+            status_code=response.status_code,
+            # Safety check
+            body=response.json() if response.text else None,
+            headers=response.headers
+        )
+        
+    # RESOURCE MANAGEMENT
+    def close(self):
+        """Close the underlying HTTPX client and release connections"""
+        self.client.close()
+        
+        
+        
+        
+        
