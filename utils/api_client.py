@@ -201,8 +201,3 @@ class APIClient:
     def close(self):
         """Close the underlying HTTPX client and release connections"""
         self.client.close()
-        
-        
-        
-        
-        
