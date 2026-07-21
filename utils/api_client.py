@@ -95,5 +95,13 @@ class APIClient:
         # Private helper method to standardize how outgoing request are logged
         def _log_request(self, method:str, url:str, **kwargs):
             """Log outgoing requests for debugging"""
-            logger.info(f"{method.upper()} -> {url}")
-            
+
+            # Logs the HTTP method and URL
+            logger.info(f"{method.upper()} -> {url}") 
+            if 'json' in kwargs: # checks if JSON payload was passed into the request
+                
+                # Logs the actual data payload
+                logger.debug(f"Payload: {kwargs['json']}")
+
+                
+
