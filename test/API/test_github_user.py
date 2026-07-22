@@ -5,10 +5,12 @@ Uses AAA[Arrange, Act, Assert] test pattern
 '''
 
 import pytest
+from httpx import HTTPStatusError
 from fixtures.api_fixture import github_api_client, api_test_data
  
 # ------------------------------------------------------------------
 # POSITIVE TEST CASES HAPPY PATH
+#   GET TESTS
 # ------------------------------------------------------------------
 
 @pytest.mark.api_test
@@ -62,6 +64,30 @@ def test_get_user_repos(github_api_client):
 # NEGATIVE TEST CASES SAD PATH XD
 # ------------------------------------------------------------------
 
+@pytest.mark.api_test
+def test_get_nonexistent_user(github_api_client):
+    # Test: Fetch a user that doesn't exist
+    # Expected: Raises HTTP error 404 status
+    
+    # Arrange
+    nonexistent_user = "noUSERatALL"
+    
+    # Act and Assert
+   
+    with pytest.raises(HTTPStatusError) as exc_info:
+        github_api_client.get_method(f'/{nonexistent_user}')
+     # This is a context manager
+        # APIClient.get() method calls response.raise_for_status()
+        # 404 response will crash the Python script
+        # This block tells pytest: 'I expect the next line of code to throw
+        # this specific error. Catch it, save the error data into exc_info.
+        # and pass the test. If it DOES NOT throw an error, fail the test'
+        
+    # Digs into the caught exception to verify the reason it crashed.
+    # Ensures that the response is a 404 http status code
+    assert exc_info.value.response.status_code == 404
+        
+    
     
     
     
