@@ -86,8 +86,30 @@ def test_get_nonexistent_user(github_api_client):
     # Digs into the caught exception to verify the reason it crashed.
     # Ensures that the response is a 404 http status code
     assert exc_info.value.response.status_code == 404
-        
     
+    
+# ------------------------------------------------------------------
+# DATA-DRIVEN TESTS
+# ------------------------------------------------------------------
+
+@pytest.mark.data_test
+def test_get_user_with_external_data(github_api_client, api_test_data):
+    # Test:Fetch user using data from JSON file
+    # This demonstrates the data-drive pattern
+    # Change the JSON, and the test automatically uses new data
+    
+    # Arrange
+    # api_test_data[...]: navigates the dict created by JSON fixture
+    test_user = api_test_data['github_api']['valid_user']
+    username = test_user['username']
+    min_repos = test_user['expected_repos_count_min']
+    
+    # Act
+    response = github_api_client.get_method(f'/{username}')
+    
+    # Assert
+    assert response.is_success
+    assert response.body['login'] == username
     
     
     
