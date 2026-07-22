@@ -109,10 +109,4 @@ def test_get_user_with_external_data(github_api_client, api_test_data):
     
     # Assert
     assert response.is_success
-    assert response.body['login'] == username
-    
-    
-    
-    
-
-    
+    assert response.body['login'] == username    
