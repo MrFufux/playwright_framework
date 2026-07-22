@@ -2,7 +2,7 @@ import pytest
 from pages.wazuko_home_page import WazukoHomePage
 from playwright.sync_api import expect, Page
 
-@pytest.mark.ui
+@pytest.mark.ui_test
 def test_where_we_help_option(ui_page: Page):
 
     # Following the AAA Arrange-Act-Assert
