@@ -7,7 +7,6 @@ Tests request them by name in their function signature.
 '''
 import os #Python's OS interface. Reads environments variables | constructs file paths
 import pytest
-import httpx
 import json
 from utils.api_client import APIClient
 
