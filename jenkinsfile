@@ -3,3 +3,75 @@
 
 //The CI/CD pipeline code to clone the repo, install dependencies, 
 // and execute the tests in a headless environment.
+
+ // pipeline: root block that encloses the entire jenkins file
+pipeline{
+    agent any // execute this pipeline on any available worker node
+
+    // Defines global environment variables available
+    environment{
+        PYTHON_VERSION = '3.11'
+    }
+
+    // EXECUTION STAGES
+    //Block contains the actual work the pipeline forms.
+    // Runs in sequiential order
+    stages{
+        stage('Checkout'){
+            steps{
+                echo 'Checking out source code...'
+                checkout scm 
+                // This jenkins built-in command pulls the source code from the
+                // repository where the jenkins file is stored
+                // So the pipeline has files to work on
+            }
+        }
+
+        // It runs a shell command (sh) to execute pip install -r requirements.txt 
+        // o pyproject.toml
+        // Installs the necessary Python packages
+        stage('Setup Python Environment'){
+            steps{
+                echo 'Setting up Python environment...'
+
+                sh 'pip install -r pyproject.toml'
+            }
+        }
+
+        //Executes the test suites using the pytest framework
+        // Runs three separate shell commands at the same time
+        // If any of these test commands fail, the pipeline execution
+        // stops and mark it as a failure
+        stage('Run Pytest Tests suites'){
+            sh 'pytest fixtures/'
+            sh 'pytest tests/API'
+            sh 'pytest tests/UI'
+        }
+        
+        // Placeholder. No execution
+        // could be repace with commands to package the app
+        // Docker image
+        stage('Build Artifacts (Optional)'){
+            steps{
+            echo 'Build stage complete'
+            }
+        }
+    }
+    // Post - Run Actions
+    // Block that defines cleanup and notification steps that happen
+    // after the stages have finished 
+    post{
+        // Commands inside runs no matter the outcome(pipeline succeed, failed or aborted)
+        // IS simply logs that the execution finished
+        always{
+            echo 'Pipeline execution finished'
+        }
+        // Commands here run ONLY if the pipeline fails
+        // Prints a visible block of text to the Jenkins console log
+        failure{
+            echo '======================================='
+            echo 'Pipeline FAILED. Review the logs for details.'
+            echo '=======================================' 
+        }
+    }
+}
