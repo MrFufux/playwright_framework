@@ -44,8 +44,3 @@ def test_get_user_profile_api(live_server):
     
     applies some abstraction
     '''
-    
-    
-    
-    
-

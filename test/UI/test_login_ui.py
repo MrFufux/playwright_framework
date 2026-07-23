@@ -41,9 +41,3 @@ def test_login(page:Page, live_server):
     welcome_message = page.get_by_title('Welcome to the mad house!')
     expect(welcome_message).to_be_enabled()
     expect(welcome_message).to_contain_text(f'Welcome. {test_username}')
-    
-
-    
-    
-    
-    
